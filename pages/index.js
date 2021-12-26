@@ -1,13 +1,24 @@
+import { useEffect, useState } from 'react'
 import Head from 'next/head'
 import AppLayout from '../components/AppLayout/index'
 import Button from '../components/Button/index'
 import GitHub from '../components/Icons/GitHub'
-
-import Link from 'next/link'
 import Image from 'next/image'
 import { colors } from '../styles/theme'
+import { loginWithGitHub, onAuthStateChanged } from '../firebase/client'
 
 export default function Home() {
+  const [user, setUser] = useState(null)
+  useEffect(() => {
+    onAuthStateChanged(setUser)
+  }, [])
+
+  const handleClick = () => {
+    loginWithGitHub().then(setUser).catch(err => {
+      console.log(err);
+    })
+  }
+
   return (
     <>
       <Head>
@@ -26,14 +37,25 @@ export default function Home() {
           />
           <h1 >Devtter</h1>
           <h2>Talk about development <br /> with developers</h2>
-          <Link href="/timeline">
-            <a>devit</a>
-          </Link>
           <div>
-            <Button>
-              <GitHub fill={colors.white} width={24} height={24} />
-              Login with Github
-            </Button>
+            {
+              user === null &&
+              <Button onClick={handleClick}>
+                <GitHub fill={colors.white} width={24} height={24} />
+                Login with Github
+              </Button>
+            }
+            {
+              user && user.avatar && <div>
+                <Image
+                  src={user.avatar}
+                  alt="user"
+                  width={50}
+                  height={50}
+                />
+                <strong>{user.username}</strong>
+              </div>
+            }
           </div>
         </section>
       </AppLayout>
