@@ -15,7 +15,7 @@ export default function Home() {
 
   const handleClick = () => {
     loginWithGitHub().then(setUser).catch(err => {
-      console.log(err);
+      console.log(err)
     })
   }
 
