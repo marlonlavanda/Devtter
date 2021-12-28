@@ -1,5 +1,5 @@
-import Link from "next/link";
-import AppLayout from "../../components/AppLayout";
+import Link from "next/link"
+import AppLayout from "components/AppLayout"
 
 export default function Timeline({ userName }) {
   return (
@@ -9,10 +9,5 @@ export default function Timeline({ userName }) {
         <Link href="/">Back to home</Link>
       </AppLayout>
     </>
-  );
+  )
 }
-
-// Timeline.getInitialProps = () => {
-//   return fetch('http://localhost:3000/api/hello')
-//   .then(res => res.json())
-// }

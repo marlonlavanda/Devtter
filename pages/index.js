@@ -1,25 +1,30 @@
-import { useEffect, useState } from "react";
-import Head from "next/head";
-import AppLayout from "../components/AppLayout/index";
-import Button from "../components/Button/index";
-import GitHub from "../components/Icons/GitHub";
-import Image from "next/image";
-import { colors } from "../styles/theme";
-import { loginWithGitHub, onAuthStateChanged } from "../firebase/client";
+import { useEffect, useState } from "react"
+import Head from "next/head"
+
+import AppLayout from "components/AppLayout/index"
+import Button from "components/Button/index"
+import GitHub from "components/Icons/GitHub"
+import Logo from "components/Icons/Logo"
+
+import Avatar from "components/Avatar/index.js"
+
+import { colors } from "styles/theme"
+
+import { loginWithGitHub, onAuthStateChanged } from "../firebase/client"
 
 export default function Home() {
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useState(null)
   useEffect(() => {
-    onAuthStateChanged(setUser);
-  }, []);
+    onAuthStateChanged(setUser)
+  }, [])
 
   const handleClick = () => {
     loginWithGitHub()
       .then(setUser)
       .catch((err) => {
-        console.log(err);
-      });
-  };
+        console.log(err)
+      })
+  }
 
   return (
     <>
@@ -31,7 +36,7 @@ export default function Home() {
 
       <AppLayout>
         <section>
-          <Image src="/devter-logo.png" alt="Logo" width={120} height={120} />
+          <Logo height={120} />
           <h1>Devtter</h1>
           <h2>
             Talk about development <br /> with developers
@@ -45,8 +50,13 @@ export default function Home() {
             )}
             {user && user.avatar && (
               <div>
-                <Image src={user.avatar} alt="user" width={50} height={50} />
-                <strong>{user.username}</strong>
+                <Avatar
+                  src={user.avatar}
+                  alt={user.username}
+                  text={user.username}
+                  withText
+                />
+                {/* <Image src={user.avatar} alt="user" width={50} height={50} /> */}
               </div>
             )}
           </div>
@@ -54,7 +64,7 @@ export default function Home() {
       </AppLayout>
       <style jsx>
         {`
-          section{
+          section {
             display: grid;
             height: 100%;
             place-content: center;
@@ -66,14 +76,15 @@ export default function Home() {
           }
 
           h1 {
-            color: ${colors.primary}
+            color: ${colors.primary};
             font-weight: 800;
+            font-size: 32px;
             margin-bottom: 16px;
           }
 
           h2 {
             font-size: 16px;
-            color: ${colors.secondary}
+            color: ${colors.secondary};
           }
 
           a {
@@ -83,5 +94,5 @@ export default function Home() {
         `}
       </style>
     </>
-  );
+  )
 }
