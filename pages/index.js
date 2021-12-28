@@ -1,23 +1,25 @@
-import { useEffect, useState } from 'react'
-import Head from 'next/head'
-import AppLayout from '../components/AppLayout/index'
-import Button from '../components/Button/index'
-import GitHub from '../components/Icons/GitHub'
-import Image from 'next/image'
-import { colors } from '../styles/theme'
-import { loginWithGitHub, onAuthStateChanged } from '../firebase/client'
+import { useEffect, useState } from "react";
+import Head from "next/head";
+import AppLayout from "../components/AppLayout/index";
+import Button from "../components/Button/index";
+import GitHub from "../components/Icons/GitHub";
+import Image from "next/image";
+import { colors } from "../styles/theme";
+import { loginWithGitHub, onAuthStateChanged } from "../firebase/client";
 
 export default function Home() {
-  const [user, setUser] = useState(null)
+  const [user, setUser] = useState(null);
   useEffect(() => {
-    onAuthStateChanged(setUser)
-  }, [])
+    onAuthStateChanged(setUser);
+  }, []);
 
   const handleClick = () => {
-    loginWithGitHub().then(setUser).catch(err => {
-      console.log(err)
-    })
-  }
+    loginWithGitHub()
+      .then(setUser)
+      .catch((err) => {
+        console.log(err);
+      });
+  };
 
   return (
     <>
@@ -29,37 +31,29 @@ export default function Home() {
 
       <AppLayout>
         <section>
-          <Image
-            src="/devter-logo.png"
-            alt="Logo"
-            width={120}
-            height={120}
-          />
-          <h1 >Devtter</h1>
-          <h2>Talk about development <br /> with developers</h2>
+          <Image src="/devter-logo.png" alt="Logo" width={120} height={120} />
+          <h1>Devtter</h1>
+          <h2>
+            Talk about development <br /> with developers
+          </h2>
           <div>
-            {
-              user === null &&
+            {user === null && (
               <Button onClick={handleClick}>
                 <GitHub fill={colors.white} width={24} height={24} />
                 Login with Github
               </Button>
-            }
-            {
-              user && user.avatar && <div>
-                <Image
-                  src={user.avatar}
-                  alt="user"
-                  width={50}
-                  height={50}
-                />
+            )}
+            {user && user.avatar && (
+              <div>
+                <Image src={user.avatar} alt="user" width={50} height={50} />
                 <strong>{user.username}</strong>
               </div>
-            }
+            )}
           </div>
         </section>
       </AppLayout>
-      <style jsx>{`
+      <style jsx>
+        {`
           section{
             display: grid;
             height: 100%;
@@ -89,5 +83,5 @@ export default function Home() {
         `}
       </style>
     </>
-  )
+  );
 }
