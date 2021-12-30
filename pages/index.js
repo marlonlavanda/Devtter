@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+import { useEffect } from "react"
 import { useRouter } from "next/router"
 import Head from "next/head"
 
@@ -7,29 +7,24 @@ import Button from "components/Button/index"
 import GitHub from "components/Icons/GitHub"
 import Logo from "components/Icons/Logo"
 
-import Avatar from "components/Avatar/index.js"
-
 import { colors } from "styles/theme"
 
-import { loginWithGitHub, onAuthStateChanged } from "../firebase/client"
+import { loginWithGitHub } from "../firebase/client"
+
+import useUser, { USER_STATES } from "hooks/useUser"
 
 export default function Home() {
-  const [user, setUser] = useState(null)
+  const user = useUser()
   const router = useRouter()
-
-  useEffect(() => {
-    onAuthStateChanged(setUser)
-  }, [])
 
   useEffect(() => {
     user && router.replace("/home")
   }, [user])
+
   const handleClick = () => {
-    loginWithGitHub()
-      .then(setUser)
-      .catch((err) => {
-        console.log(err)
-      })
+    loginWithGitHub().catch((err) => {
+      console.log(err)
+    })
   }
 
   return (
@@ -48,23 +43,13 @@ export default function Home() {
             Talk about development <br /> with developers
           </h2>
           <div>
-            {user === null && (
+            {user === USER_STATES.NOT_LOGGED && (
               <Button onClick={handleClick}>
                 <GitHub fill={colors.white} width={24} height={24} />
                 Login with Github
               </Button>
             )}
-            {user && user.avatar && (
-              <div>
-                <Avatar
-                  src={user.avatar}
-                  alt={user.username}
-                  text={user.username}
-                  withText
-                />
-                {/* <Image src={user.avatar} alt="user" width={50} height={50} /> */}
-              </div>
-            )}
+            {user === USER_STATES.NOT_kNOWN && <img src="/spinner.gif" />}
           </div>
         </section>
       </AppLayout>

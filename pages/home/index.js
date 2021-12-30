@@ -2,15 +2,17 @@ import { useEffect, useState } from "react"
 
 import AppLayout from "components/AppLayout/index"
 import Devit from "components/Devit"
+import useUser from "hooks/useUser"
+
+import { fetchLatestDevits } from "../../firebase/client"
 
 export default function HomePage() {
   const [timeline, setTimeline] = useState([])
+  const user = useUser()
 
   useEffect(() => {
-    fetch("http://localhost:3000/api/statuses/home_timeline")
-      .then((res) => res.json())
-      .then(setTimeline)
-  })
+    user && fetchLatestDevits().then(setTimeline)
+  }, [user])
 
   return (
     <>
@@ -19,14 +21,15 @@ export default function HomePage() {
           <h2>Inicio</h2>
         </header>
         <section>
-          {timeline.map((devit) => {
+          {timeline.map(({ id, avatar, content, userName, createdAt }) => {
             return (
               <Devit
-                key={devit.id}
-                id={devit.id}
-                avatar={devit.avatar}
-                message={devit.message}
-                username={devit.username}
+                key={id}
+                id={id}
+                avatar={avatar}
+                content={content}
+                userName={userName}
+                createdAt={createdAt}
               />
             )
           })}
@@ -35,34 +38,28 @@ export default function HomePage() {
       </AppLayout>
       <style jsx>{`
         header {
-          display: flex;
           align-items: center;
-          border-bottom: 1px solid #ccc;
+          background: #ffffffaa;
+          backdrop-filter: blur(5px);
+          border-bottom: 1px solid #eee;
           height: 49px;
-          width: 100%;
+          display: flex;
           position: sticky;
           top: 0;
-        }
-
-        article {
-          padding: 10px;
-        }
-
-        section {
-          padding-top: 49px;
-        }
-
-        nav {
-          bottom: 0;
-          border-top: 1px solid #ccc;
-          height: 49px;
-          position: fixed;
           width: 100%;
         }
-
         h2 {
           font-size: 21px;
           font-weight: 800;
+          padding-left: 15px;
+        }
+        nav {
+          background: #fff;
+          bottom: 0;
+          border-top: 1px solid #eee;
+          height: 49px;
+          position: sticky;
+          width: 100%;
         }
       `}</style>
     </>
