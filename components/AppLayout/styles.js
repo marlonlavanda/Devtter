@@ -33,6 +33,8 @@ export default css`
     place-items: center;
   }
   main {
+    display: flex;
+    flex-direction: column;
     background: #fff;
     border-radius: 10px;
     box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);

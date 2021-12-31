@@ -1,4 +1,5 @@
 import { getApps, initializeApp } from "firebase/app"
+import { getStorage, ref, uploadBytesResumable } from "firebase/storage"
 import { getAuth, GithubAuthProvider, signInWithPopup } from "firebase/auth"
 import {
   getFirestore,
@@ -6,6 +7,8 @@ import {
   addDoc,
   Timestamp,
   getDocs,
+  orderBy,
+  query,
 } from "firebase/firestore"
 const firebaseConfig = {
   apiKey: "AIzaSyAaPMUVhSExNNPwEI7iEGdcJp50Yel-_DU",
@@ -19,8 +22,8 @@ const firebaseConfig = {
 !getApps().length && initializeApp(firebaseConfig)
 const app = initializeApp(firebaseConfig)
 const auth = getAuth(app)
-
 const db = getFirestore()
+const storage = getStorage(app)
 
 const mapUserFromFirebaseAuthToUser = (user) => {
   const { displayName, email, photoURL, uid } = user
@@ -45,11 +48,12 @@ export const loginWithGitHub = () => {
   return signInWithPopup(auth, new GithubAuthProvider())
 }
 
-export const addDevit = ({ userName, userId, avatar, content }) => {
+export const addDevit = ({ userName, userId, img, avatar, content }) => {
   return addDoc(collection(db, "devits"), {
     avatar,
     content,
     userId,
+    img,
     userName,
     createdAt: Timestamp.fromDate(new Date()),
     likesCount: 0,
@@ -58,20 +62,28 @@ export const addDevit = ({ userName, userId, avatar, content }) => {
 }
 
 export const fetchLatestDevits = () => {
-  return getDocs(collection(db, "devits")).then(({ docs }) => {
+  const devits = collection(db, "devits")
+  const orderedDevits = query(devits, orderBy("createdAt", "desc"))
+  return getDocs(orderedDevits).then(({ docs }) => {
     return docs.map((doc) => {
       const data = doc.data()
       const id = doc.id
       const { createdAt } = data
 
-      const date = new Date(createdAt.seconds * 1000)
-      const normalizedCreatedAt = new Intl.DateTimeFormat("es-ES").format(date)
+      // const date = new Date(createdAt.seconds * 1000)
+      // const normalizedCreatedAt = new Intl.DateTimeFormat("es-ES").format(date)
 
       return {
         ...data,
         id,
-        createdAt: normalizedCreatedAt,
+        createdAt: +createdAt.toDate(),
       }
     })
   })
+}
+
+export const uploadImage = (file) => {
+  const reference = ref(storage, `images/${file.name}`)
+  const task = uploadBytesResumable(reference, file)
+  return task
 }

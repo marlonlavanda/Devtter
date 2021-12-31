@@ -55,6 +55,10 @@ export default function Home() {
       </AppLayout>
       <style jsx>
         {`
+          img {
+            width: 120px;
+          }
+
           section {
             display: grid;
             height: 100%;
@@ -64,6 +68,13 @@ export default function Home() {
 
           div {
             margin-top: 16px;
+          }
+
+          section {
+            display: grid;
+            height: 100%;
+            place-content: center;
+            place-items: center;
           }
 
           h1 {
@@ -76,11 +87,6 @@ export default function Home() {
           h2 {
             font-size: 16px;
             color: ${colors.secondary};
-          }
-
-          a {
-            color: blue;
-            text-decoration: none;
           }
         `}
       </style>
