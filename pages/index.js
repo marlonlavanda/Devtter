@@ -2,7 +2,6 @@ import { useEffect } from "react"
 import { useRouter } from "next/router"
 import Head from "next/head"
 
-import AppLayout from "components/AppLayout/index"
 import Button from "components/Button/index"
 import GitHub from "components/Icons/GitHub"
 import Logo from "components/Icons/Logo"
@@ -35,24 +34,22 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <AppLayout>
-        <section>
-          <Logo height={120} />
-          <h1>Devtter</h1>
-          <h2>
-            Talk about development <br /> with developers
-          </h2>
-          <div>
-            {user === USER_STATES.NOT_LOGGED && (
-              <Button onClick={handleClick}>
-                <GitHub fill={colors.white} width={24} height={24} />
-                Login with Github
-              </Button>
-            )}
-            {user === USER_STATES.NOT_kNOWN && <img src="/spinner.gif" />}
-          </div>
-        </section>
-      </AppLayout>
+      <section>
+        <Logo height={120} />
+        <h1>Devtter</h1>
+        <h2>
+          Talk about development <br /> with developers
+        </h2>
+        <div>
+          {user === USER_STATES.NOT_LOGGED && (
+            <Button onClick={handleClick}>
+              <GitHub fill={colors.white} width={24} height={24} />
+              Login with Github
+            </Button>
+          )}
+          {user === USER_STATES.NOT_kNOWN && <img src="/spinner.gif" />}
+        </div>
+      </section>
       <style jsx>
         {`
           img {

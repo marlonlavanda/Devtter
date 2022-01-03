@@ -27,12 +27,12 @@ export default function useTimeAgo(timestamp) {
       const newTimeAgo = getDateDiffs(timestamp)
       setTimeago(newTimeAgo)
     }, 5000)
+
     return () => clearInterval(interval)
   }, [timestamp])
 
-  const rtf = new Intl.RelativeTimeFormat("en", {
-    style: "long",
-  })
+  const rtf = new Intl.RelativeTimeFormat("es", { style: "short" })
+
   const { value, unit } = timeago
 
   return rtf.format(value, unit)

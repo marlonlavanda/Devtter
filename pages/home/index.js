@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react"
 
-import AppLayout from "components/AppLayout/index"
 import Devit from "components/Devit"
 import useUser from "hooks/useUser"
 
@@ -21,46 +20,44 @@ export default function HomePage() {
 
   return (
     <>
-      <AppLayout>
-        <Head>
-          <title>Inicio / Devtter</title>
-        </Head>
-        <header>
-          <h2>Inicio</h2>
-        </header>
-        <section>
-          {timeline.map(({ id, img, avatar, content, userName, createdAt }) => {
-            return (
-              <Devit
-                key={id}
-                id={id}
-                img={img}
-                avatar={avatar}
-                content={content}
-                userName={userName}
-                createdAt={createdAt}
-              />
-            )
-          })}
-        </section>
-        <nav>
-          <Link href="/home">
-            <a>
-              <Home stroke="#09f" width="32" />
-            </a>
-          </Link>
-          <Link href="/compose/tweet">
-            <a>
-              <Search stroke="#09f" width="32" />
-            </a>
-          </Link>
-          <Link href="/compose/tweet">
-            <a>
-              <Create stroke="#09f" width="32" />
-            </a>
-          </Link>
-        </nav>
-      </AppLayout>
+      <Head>
+        <title>Inicio / Devtter</title>
+      </Head>
+      <header>
+        <h2>Inicio</h2>
+      </header>
+      <section>
+        {timeline.map(({ id, img, avatar, content, userName, createdAt }) => {
+          return (
+            <Devit
+              key={id}
+              id={id}
+              img={img}
+              avatar={avatar}
+              content={content}
+              userName={userName}
+              createdAt={createdAt}
+            />
+          )
+        })}
+      </section>
+      <nav>
+        <Link href="/home">
+          <a>
+            <Home stroke="#09f" width="32" />
+          </a>
+        </Link>
+        <Link href="/compose/tweet">
+          <a>
+            <Search stroke="#09f" width="32" />
+          </a>
+        </Link>
+        <Link href="/compose/tweet">
+          <a>
+            <Create stroke="#09f" width="32" />
+          </a>
+        </Link>
+      </nav>
       <style jsx>{`
         header {
           align-items: center;

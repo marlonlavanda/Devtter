@@ -9,7 +9,9 @@ import {
   getDocs,
   orderBy,
   query,
+  onSnapshot,
 } from "firebase/firestore"
+
 const firebaseConfig = {
   apiKey: "AIzaSyAaPMUVhSExNNPwEI7iEGdcJp50Yel-_DU",
   authDomain: "devtter-7715d.firebaseapp.com",
@@ -61,24 +63,34 @@ export const addDevit = ({ userName, userId, img, avatar, content }) => {
   })
 }
 
+const mapDevitFromFirebaseToDevitObject = (doc) => {
+  const data = doc.data()
+  const id = doc.id
+  const { createdAt } = data
+
+  return {
+    ...data,
+    id,
+    createdAt: +createdAt.toDate(),
+  }
+}
+
+export const listenLatestDevits = (callback) => {
+  const devits = collection(db, "devits")
+  const orderedDevits = query(devits, orderBy("createdAt", "desc"))
+
+  return onSnapshot(orderedDevits, (snapshot) => {
+    // const newDevits = doc.map(docs => mapDevitFromFirebaseToDevitObject(docs))
+    const newDevits = snapshot.map(mapDevitFromFirebaseToDevitObject)
+    callback(newDevits)
+  })
+}
+
 export const fetchLatestDevits = () => {
   const devits = collection(db, "devits")
   const orderedDevits = query(devits, orderBy("createdAt", "desc"))
   return getDocs(orderedDevits).then(({ docs }) => {
-    return docs.map((doc) => {
-      const data = doc.data()
-      const id = doc.id
-      const { createdAt } = data
-
-      // const date = new Date(createdAt.seconds * 1000)
-      // const normalizedCreatedAt = new Intl.DateTimeFormat("es-ES").format(date)
-
-      return {
-        ...data,
-        id,
-        createdAt: +createdAt.toDate(),
-      }
-    })
+    return docs.map(mapDevitFromFirebaseToDevitObject)
   })
 }
 
