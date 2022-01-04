@@ -35,4 +35,5 @@ yarn-error.log*
 
 .eslintcache
 
-firebase/firebase-key.json
+# firebase keys
+firebase/firebase-keys.json
